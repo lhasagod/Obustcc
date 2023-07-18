@@ -1,0 +1,174 @@
+
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+
+
+ checkPermission() async {
+  LocationPermission permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissão de localização negada permanentemente, vá para as configurações do aplicativo
+      // do usuário e solicite permissão manualmente.
+      return;
+    }
+  }
+  if (permission == LocationPermission.deniedForever) {
+    // Permissão de localização negada permanentemente, vá para as configurações do aplicativo
+    // do usuário e solicite permissão manualmente.
+    return;
+  }
+  // Permissão de localização concedida, pode continuar com as operações que requerem localização.
+}
+_mlocation() {
+  late final DatabaseReference _latituderef;
+  late final DatabaseReference _longituderef;
+  late final Timer _timer;
+  late final Timer _timer2;
+  late final DatabaseReference _temporef;
+  late StreamSubscription<DatabaseEvent> _lonSubscription;
+  late StreamSubscription<DatabaseEvent> _latSubscription;
+  late final DatabaseReference _Onibus;
+
+  _timer = Timer.periodic(Duration(seconds: 10), (timer) => _mlocation());
+  _latituderef = FirebaseDatabase.instance.ref('onibus/ibira/lat');
+  _longituderef = FirebaseDatabase.instance.ref('onibus/ibira/long');
+  _temporef = FirebaseDatabase.instance.ref('onibus/ibira/tempo');
+
+  _timer.cancel();
+
+
+}
+
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+
+}
+
+
+class _MyAppState extends State<MyApp> {
+
+  String _location = 'Buscando localização...';
+  double _distanceInMeters = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _mlocation();
+    checkPermission();
+
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) => _mlocation());
+    _latituderef = FirebaseDatabase.instance.ref('onibus/ibira/lat');
+    _longituderef = FirebaseDatabase.instance.ref('onibus/ibira/long');
+    _temporef = FirebaseDatabase.instance.ref('onibus/ibira/tempo');
+
+  }
+
+  @override // a partir da minha class vou escrever  subistuir
+  void dispose() {
+    _timer.cancel();
+    _timer2.cancel();
+    super.dispose();
+  }
+
+
+  _mlocation() async {
+    // _Onibus = FirebaseDatabase.instance.ref('onibus');
+    //
+    // final snapshot = await _Onibus.get();
+    // print(snapshot.value);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    final lat1 = position.latitude;
+    final lon1 = position.longitude;
+    print("salve");
+
+    double lat2 = 0;
+    final lat2Snapshot = await _latituderef.get();
+    lat2 = lat2Snapshot.value as double;
+
+    double lon2 = 0;
+    final lot2Snapshot = await _longituderef.get();
+    lon2 = lot2Snapshot.value as double;
+
+    _lonSubscription = _longituderef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        lon2 = (event.snapshot.value) as double;
+      });
+    });
+
+    _latSubscription = _latituderef.onValue.listen((DatabaseEvent event) {
+      setState(() {
+        lat2 = (event.snapshot.value) as double;
+      });
+    });
+
+
+    double distanceInMeters = await Geolocator.distanceBetween(
+        lat1, lon1, lat2, lon2);
+    setState(() {
+      _location =
+      'Latitude: ${position.latitude}\nLongitude: ${position.longitude}';
+      _distanceInMeters = distanceInMeters;
+      print("salve3");
+    });
+    print("salve2");
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Localização em tempo real'),
+        ),
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  _location,
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  'Distância em metros: ${_distanceInMeters.toStringAsFixed(
+                      2) ?? "Não disponível"}',
+                  style: TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
+                ),
+
+
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

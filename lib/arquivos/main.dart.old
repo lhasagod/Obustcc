@@ -1,0 +1,59 @@
+import 'package:flutter/material.dart';
+import 'PAGINAPRINCIPAL.dart';
+import 'PESQUISADOONIBUS.dart';
+import 'LISTADEPONTOSPROXIMOS1.dart';
+import 'LISTADEPONTOSPROXIMOS2.dart';
+import 'TEMPODOSONIBUSDOPONTO.dart';
+import 'TELAFINAL.dart';
+
+import 'localizacao.dart.old';
+import 'package:obus/lib/localizacao.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
+
+Future<void> checkPermission() async {
+  LocationPermission permission = await Geolocator.checkPermission();
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      // Permissão de localização negada permanentemente, vá para as configurações do aplicativo
+      // do usuário e solicite permissão manualmente.
+      return;
+    }
+  }
+
+  if (permission == LocationPermission.deniedForever) {
+    // Permissão de localização negada permanentemente, vá para as configurações do aplicativo
+    // do usuário e solicite permissão manualmente.
+    return;
+  }
+
+  // Permissão de localização concedida, pode continuar com as operações que requerem localização.
+}
+
+void main() {
+  runApp(
+    MaterialApp(
+      title: 'Named Routes Demo',
+           initialRoute: '/PaginaInicial',
+      routes: {
+        '/PESQUISADOONIBUS':(context) => const PESQUISADOONIBUS(),
+        '/TELAFINAL':(context) => const TELAFINAL(),
+        '/PaginaInicial':(context) => const PaginaInicial(),
+        // When navigating to the "/" route, build the FirstScreen widget.
+        '/LISTADEPONTOSPROXIMOS': (context) => const LISTADEPONTOSPROXIMOS(),
+        '/LISTADEPONTOSPROXIMOSO': (context) => const LISTADEPONTOSPROXIMOS2(),
+        // When navigating to the "/second" route, build the SecondScreen widget.
+        '/TEMPODOSONIBUSDOPONTO': (context) => const TEMPODOSONIBUSDOPONTO(),
+
+
+      },
+    ),
+  );
+}

@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "272309223734",
+    "firebase_url": "https://tccbus-efdc1-default-rtdb.firebaseio.com",
+    "project_id": "tccbus-efdc1",
+    "storage_bucket": "tccbus-efdc1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272309223734:android:00060ed82b389cce7cb397",
+        "android_client_info": {
+          "package_name": "com.example.obus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272309223734-703o6dsfvot8q7a1osqa0bdob9421b64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFcPM55J68CgSCV_47-ROpwiTLgjxv-Zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272309223734-703o6dsfvot8q7a1osqa0bdob9421b64.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "272309223734-97ocsnkrkfqvq4gce599l7tphn734n9a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.obus"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:272309223734:android:fc6c4ebef31a68c47cb397",
+        "android_client_info": {
+          "package_name": "com.example.testes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "272309223734-703o6dsfvot8q7a1osqa0bdob9421b64.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBFcPM55J68CgSCV_47-ROpwiTLgjxv-Zk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "272309223734-703o6dsfvot8q7a1osqa0bdob9421b64.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "272309223734-97ocsnkrkfqvq4gce599l7tphn734n9a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.obus"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

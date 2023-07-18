@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:obus/localizacao.dart';
+
+class TELAFINAL extends StatelessWidget {
+  const TELAFINAL({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      body: Center(
+        child: Column(crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[ Container(margin: EdgeInsets.symmetric(vertical: 40.0,horizontal:10.0),// afasta o conteiner das bordas da tela
+            height: 160.0,
+            width: 100.0,
+            color:Colors.blueGrey,
+            child:Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(child: Text('A seguir podemos ver as informações do ônibus escolhido e 2 botões, um dele para voltar no início e outro para chamar quando o ônibus aproximar')),
+            ),),
+            Container(margin: EdgeInsets.symmetric(vertical: 40.0,horizontal:123.0),
+              color:Colors.red,
+              child:Text('Visor'),
+
+            ),
+
+            ElevatedButton(
+
+              child: Text('Ativar Notificação'),
+              onPressed: () {
+                Navigator.pushNamed(context, '/LISTADEPONTOSPROXIMOS');
+              },
+            ),
+            ElevatedButton(
+              // Within the `FirstScreen` widget
+              onPressed: () {
+                // Navigate to the second screen using a named route.
+                Navigator.pushNamed(context, '/PaginaInicial');
+              },
+              child: const Text('Cancelar'),
+            ),
+          ],
+        ),
+      ),
+    );
+
+  }
+}
